@@ -1,17 +1,18 @@
 """Console script for caserna."""
 import argparse
 import sys
+from caserna.weather import main as weather_main
 
 
 def main():
     """Console script for caserna."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('_', nargs='*')
+    parser.add_argument(
+        'weather', help='Run weather script'
+    )
     args = parser.parse_args()
-
-    print("Arguments: " + str(args._))
-    print("Replace this message by putting your code into "
-          "caserna.cli.main")
+    if args.weather:
+        weather_main()
     return 0
 
 
