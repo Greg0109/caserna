@@ -3,7 +3,13 @@ import os
 from glog import GLog
 HOSTNAME = os.uname()[1]
 if HOSTNAME != 'caserna':
-    from caserna.mocked_weather import Sensor, WindSpeedHistory, WindDirectionHistory, History
+    from caserna.mocked_weather import (
+        Sensor,
+        WindSpeedHistory,
+        WindDirectionHistory,
+        History
+    )
+    SENSOR = Sensor()
 else:
     import weatherhat
     from weatherhat.history import (
@@ -11,10 +17,10 @@ else:
         WindDirectionHistory,
         History
     )
+    SENSOR = weatherhat.WeatherHAT()
 
 
 LOGGER = GLog('weather', {})
-SENSOR = Sensor() if os.uname()[1] != 'caserna' else weatherhat.WeatherHAT()
 SENSOR_HISTORY = {
     'wind_speed': WindSpeedHistory(),
     'wind_direction': WindDirectionHistory(),
@@ -46,11 +52,9 @@ def update_sensor_history():
 
 def main():
     """Main function."""
-    runs = 0
-    while runs < 10:
+    for _ in range(10):
         update_sensor_history()
         time.sleep(5)
-        runs += 1
     print('\n')
     print('\n')
     for key, value in SENSOR_HISTORY.items():
