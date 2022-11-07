@@ -1,18 +1,21 @@
 """Console script for caserna."""
 import argparse
 import sys
-from caserna.weather import main as weather_main
+from caserna.weather_station.weather import main as weather_main
+from caserna.weather_station.flask_app import run
 
 
 def main():
     """Console script for caserna."""
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'weather', help='Run weather script'
-    )
+    parser.add_argument('-w', '--weather', nargs='*')
     args = parser.parse_args()
     if args.weather:
-        weather_main()
+        if args.weather[0] == 'test':
+            weather_main()
+        if args.weather[0] == 'server':
+            print('Running server')
+            run()
     return 0
 
 

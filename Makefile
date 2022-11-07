@@ -99,3 +99,6 @@ install-requirements:  ## install requirements
 
 update-version: ## updates the version in setup.cfg setup.py and __init__.py
 	bump2version --current-version $(CURRENT_VERSION) patch --allow-dirty --no-commit
+
+run-app: ## run the app
+	python3 caserna/flask_app.py

@@ -3,7 +3,7 @@ import os
 from glog import GLog
 HOSTNAME = os.uname()[1]
 if HOSTNAME != 'caserna':
-    from caserna.mocked_weather import (
+    from caserna.weather_station.mocked_weather import (
         Sensor,
         WindSpeedHistory,
         WindDirectionHistory,
