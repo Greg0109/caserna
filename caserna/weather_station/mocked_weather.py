@@ -1,5 +1,10 @@
 """This module is a mocked class for testing"""
 import random
+import time
+
+def get_current_time():
+    """Mocked current time"""
+    return time.time()
 
 class Sensor():
     """Mocked sensor class"""
@@ -8,31 +13,52 @@ class Sensor():
 
     def wind_speed(self):
         """Mocked wind speed"""
-        return random.randint(0, 100)
+        return {
+            'speed': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def wind_direction(self):
         """Mocked wind direction"""
-        return random.randint(0, 360)
+        return {
+            'direction': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def temperature(self):
         """Mocked temperature"""
-        return random.randint(0, 100)
+        return {
+            'temperature': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def pressure(self):
         """Mocked pressure"""
-        return random.randint(0, 100)
+        return {
+            'pressure': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def humidity(self):
         """Mocked humidity"""
-        return random.randint(0, 100)
+        return {
+            'humidity': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def light(self):
         """Mocked light"""
-        return random.randint(0, 100)
+        return {
+            'light': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
     def rain(self):
         """Mocked rain"""
-        return random.randint(0, 100)
+        return {
+            'rain': random.randint(0, 100),
+            'time': get_current_time()
+        }
 
 def WindSpeedHistory():
     """Mocked wind speed history"""

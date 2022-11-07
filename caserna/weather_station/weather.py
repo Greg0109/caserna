@@ -49,6 +49,7 @@ def update_sensor_history():
     for key, value in data.items():
         LOGGER.info(f'Updating {key} history with {value}')
         SENSOR_HISTORY[key].append(value)
+    return SENSOR_HISTORY
 
 def main():
     """Main function."""
