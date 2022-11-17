@@ -1,59 +1,48 @@
 import time
 from glog import GLog
 import weatherhat
-from weatherhat.history import (
-    WindSpeedHistory,
-    WindDirectionHistory,
-    History
-)
+from caserna.weather_station.sensor_history import sensor_history_dictionary
 
-SENSOR = weatherhat.WeatherHAT()
-LOGGER = GLog('weather', {})
-SENSOR_HISTORY = {
-    'wind_speed': WindSpeedHistory(),
-    'wind_direction': WindDirectionHistory(),
-    'temperature': History(),
-    'pressure': History(),
-    'humidity': History(),
-    'light': History(),
-    'rain': History()
-}
+class WeatherStation():
+    """The weather station."""
+    def __init__(self):
+        self.sensor = weatherhat.WeatherHAT()
+        self.logger = GLog('Weather', {})
+        self.sensor_history = sensor_history_dictionary()
 
-def get_sensor_data():
-    """Get sensor data from WeatherHAT."""
-    SENSOR.update(interval=1.0)
-    return {
-        'wind_speed': SENSOR.wind_speed,
-        'wind_direction': SENSOR.wind_direction,
-        'temperature': SENSOR.temperature,
-        'pressure': SENSOR.pressure,
-        'humidity': SENSOR.humidity,
-        'light': SENSOR.lux,
-        'rain': SENSOR.rain
-    }
+    def get_sensor_data(self):
+        """Get sensor data from WeatherHAT."""
+        self.sensor.update(interval=1.0)
+        return {
+            'wind_speed': self.sensor.wind_speed,
+            'wind_direction': self.sensor.wind_direction,
+            'temperature': self.sensor.temperature,
+            'pressure': self.sensor.pressure,
+            'humidity': self.sensor.humidity,
+            'light': self.sensor.lux,
+            'rain': self.sensor.rain
+        }
 
-def update_sensor_history():
-    """Update sensor history."""
-    SENSOR.update()
-    data = get_sensor_data()
-    for key, value in data.items():
-        LOGGER.info(f'Updating {key} history with {value}')
-        history = SENSOR_HISTORY[key]
-        history.append(value)
-    print('\n')
-
-def main():
-    """Main function."""
-    for _ in range(10):
-        update_sensor_history()
-        time.sleep(5)
-    print('\n')
-    print('\n')
-    for sensor_type, history in SENSOR_HISTORY.items():
-        for item in history.history():
-            print(f'{sensor_type}: {item.value} {item.timestamp}')
-        
+    def update_sensor_history(self):
+        """Update sensor history."""
+        self.sensor.update()
+        data = self.get_sensor_data()
+        for key, value in data.items():
+            self.logger.info(f'Updating {key} history with {value}')
+            history = self.sensor_history[key]
+            history.add(value)
         print('\n')
+        return self.sensor_history
 
-if __name__ == "__main__":
-    main()
+    def test_function(self):
+        """Main function."""
+        for _ in range(10):
+            self.update_sensor_history()
+            time.sleep(5)
+        print('\n')
+        print('\n')
+        for sensor_type, history in self.sensor_history.items():
+            for item in history.get_history():
+                for value, timestamp in item.items():
+                    print(f'{sensor_type}: {value} - {timestamp}')
+            print('\n')

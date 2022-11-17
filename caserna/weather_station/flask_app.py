@@ -1,9 +1,11 @@
 """This module creates a flask app"""
 from flask import Flask
-from caserna.weather_station.weather import update_sensor_history
+from caserna.weather_station.weather import WeatherStation
+import json
 from glog import GLog
 
 app = Flask(__name__)
+WEATHER_STATION = WeatherStation()
 LOGGER = GLog('caserna_weather_server', {})
 
 @app.route('/', methods=['GET'])
@@ -15,8 +17,9 @@ def alive():
 
 @app.route('/weather_update', methods=['GET'])
 def weather_update():
-    data = update_sensor_history()
+    data = WEATHER_STATION.update_sensor_history()
     LOGGER.info(f'Updating weather with {data}')
+    # TODO fix TypeError: Object of type SensorHistory is not JSON serializable
     return data
 
 def run():
