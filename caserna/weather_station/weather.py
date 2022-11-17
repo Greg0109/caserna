@@ -1,25 +1,13 @@
 import time
-import os
 from glog import GLog
-HOSTNAME = os.uname()[1]
-if HOSTNAME != 'ega':
-    from caserna.weather_station.mocked_weather import (
-        Sensor,
-        WindSpeedHistory,
-        WindDirectionHistory,
-        History
-    )
-    SENSOR = Sensor()
-else:
-    import weatherhat
-    from weatherhat.history import (
-        WindSpeedHistory,
-        WindDirectionHistory,
-        History
-    )
-    SENSOR = weatherhat.WeatherHAT()
+import weatherhat
+from weatherhat.history import (
+    WindSpeedHistory,
+    WindDirectionHistory,
+    History
+)
 
-
+SENSOR = weatherhat.WeatherHAT()
 LOGGER = GLog('weather', {})
 SENSOR_HISTORY = {
     'wind_speed': WindSpeedHistory(),
@@ -33,6 +21,7 @@ SENSOR_HISTORY = {
 
 def get_sensor_data():
     """Get sensor data from WeatherHAT."""
+    SENSOR.update(interval=1.0)
     return {
         'wind_speed': SENSOR.wind_speed,
         'wind_direction': SENSOR.wind_direction,
@@ -45,24 +34,26 @@ def get_sensor_data():
 
 def update_sensor_history():
     """Update sensor history."""
+    SENSOR.update()
     data = get_sensor_data()
     for key, value in data.items():
         LOGGER.info(f'Updating {key} history with {value}')
         history = SENSOR_HISTORY[key]
-        history.update(value)
-    return SENSOR_HISTORY
+        history.append(value)
+    print('\n')
 
 def main():
     """Main function."""
     for _ in range(10):
-        SENSOR.update(interval=1.0)
-        print(update_sensor_history())
+        update_sensor_history()
         time.sleep(5)
     print('\n')
     print('\n')
-    for key, value in SENSOR_HISTORY.items():
-        history = SENSOR_HISTORY[key]
-        print(f'{key}: {history.get()}')
+    for sensor_type, history in SENSOR_HISTORY.items():
+        for item in history.history():
+            print(f'{sensor_type}: {item.value} {item.timestamp}')
+        
+        print('\n')
 
 if __name__ == "__main__":
     main()
