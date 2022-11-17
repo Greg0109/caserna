@@ -23,6 +23,8 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+CURRENT_VERSION = $(shell python setup.py --version)
+
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -87,8 +89,17 @@ dist: clean ## builds source and wheel package
 	python setup.py bdist_wheel
 	ls -l dist
 
+update-version: ## updates the version in setup.cfg setup.py and __init__.py
+	bump2version --current-version $(CURRENT_VERSION) patch --allow-dirty --no-commit
+
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+install-ega: clean dist update-version## installs the package on the server
+	scp dist/*.whl ega:Desktop/
+	ssh ega "pip install ~/Desktop/*.whl"
+	ssh ega "sudo pip install ~/Desktop/*.whl"
+	ssh ega "rm ~/Desktop/*.whl"
 
 env-create:  ## creates a virtual environment using tox
 	tox -e caserna --recreate
