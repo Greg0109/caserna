@@ -90,12 +90,21 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 update-version: ## updates the version in setup.cfg setup.py and __init__.py
+	bump2version --current-version $(CURRENT_VERSION) minor --allow-dirty --no-commit
+
+update-version-major:
+	bump2version --current-version $(CURRENT_VERSION) major --allow-dirty --no-commit
+
+update-version-patch:
 	bump2version --current-version $(CURRENT_VERSION) patch --allow-dirty --no-commit
+
+update-version-alpha: ## updates the version in setup.cfg setup.py and __init__.py
+	bump2version --current-version $(CURRENT_VERSION) prerelease --allow-dirty --no-commit
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
-install-ega: clean dist update-version## installs the package on the server
+install-ega: clean dist update-version-patch ## installs the package on the server
 	scp dist/*.whl ega:Desktop/
 	ssh ega "pip install ~/Desktop/*.whl"
 	ssh ega "sudo pip install ~/Desktop/*.whl"
