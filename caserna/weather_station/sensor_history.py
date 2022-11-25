@@ -44,7 +44,9 @@ class SensorHistory():
         total = sum(item['value'] for item in self.history)
         return total / len(self.history)
 
-    
+    def get_latest_value(self):
+        """Get latest value."""
+        return self.history[-1]['value']
 
 
 def sensor_history_dictionary():

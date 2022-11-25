@@ -31,7 +31,6 @@ class WeatherStation():
             self.logger.info(f'Updating {key} history with {value}')
             history = self.sensor_history[key]
             history.add(value)
-        print('\n')
         return self.sensor_history
 
     def test_function(self):
