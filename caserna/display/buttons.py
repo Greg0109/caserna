@@ -42,7 +42,7 @@ class Buttons():
     def handle_button(self, pin):
         """Handle button press."""
         label = self.labels[self.buttons.index(pin)]
-        print(f'Button {label} pressed!')
+
         if label == 'A':
             self.weather_type = 'update'
         elif label == 'B':
@@ -51,6 +51,12 @@ class Buttons():
             self.weather_type = 'max'
         elif label == 'Y':
             self.weather_type = 'off'
+
+        if self.weather_type != 'off':
+            weather_data = self._get_weather()
+            self.display.update_display(weather_data, self.weather_type)
+        else:
+            self.display.turn_off_display()
 
     def attach_buttons(self):
         """Attach buttons to the handle_button function."""
@@ -61,11 +67,9 @@ class Buttons():
         """Get weather data and display it."""
         while True:
             if self.weather_type != 'off':
-                print(f'Getting weather data from {self.weather_retrieval_types[self.weather_type]}...')
                 weather_data = self._get_weather()
-                self.display.update_display(weather_data)
+                self.display.update_display(weather_data, self.weather_type)
                 time.sleep(self.timer)
             else:
-                print('Weather display is off.')
                 self.display.turn_off_display()
                 time.sleep(1)

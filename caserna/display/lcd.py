@@ -35,6 +35,7 @@ class Display():
         self.font = ImageFont.truetype(UserFont, self.font_size)
         self.text_color = (255, 255, 255)
         self.back_color = (0, 170, 170)
+        self.type = 'Update'
         atexit.register(self.turn_off_display)
 
     def _create_canvas(self):
@@ -45,6 +46,7 @@ class Display():
 
     def _draw_weather_on_display(self):
         """Draw weather data on the display."""
+        self._draw_type()
         self._draw_temperature()
         self._draw_humidity()
         self._draw_pressure()
@@ -53,51 +55,57 @@ class Display():
         self._draw_rain()
         self._draw_light()
 
+    def _draw_type(self):
+        """Draw type on the display."""
+        type_text = f'Type: {self.type}'
+        self.draw.text((10, 215), type_text, font=self.font, fill=self.text_color)
+        
     def _draw_temperature(self):
         """Draw temperature on the display."""
         temperature = self.weather_data['temperature']
         temperature_text = f'Temperature: {temperature}°C'
-        self.draw.text((10, 10), temperature_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 5), temperature_text, font=self.font, fill=self.text_color)
     
     def _draw_humidity(self):
         """Draw humidity on the display."""
         humidity = self.weather_data['humidity']
         humidity_text = f'Humidity: {humidity}%'
-        self.draw.text((10, 40), humidity_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 35), humidity_text, font=self.font, fill=self.text_color)
 
     def _draw_pressure(self):
         """Draw pressure on the display."""
         pressure = self.weather_data['pressure']
         pressure_text = f'Pressure: {pressure} hPa'
-        self.draw.text((10, 70), pressure_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 65), pressure_text, font=self.font, fill=self.text_color)
 
     def _draw_wind_speed(self):
         """Draw wind speed on the display."""
         wind_speed = self.weather_data['wind_speed']
         wind_speed_text = f'Wind speed: {wind_speed} km/h'
-        self.draw.text((10, 100), wind_speed_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 95), wind_speed_text, font=self.font, fill=self.text_color)
 
     def _draw_wind_direction(self):
         """Draw wind direction on the display."""
         wind_direction = self.weather_data['wind_direction']
         wind_direction_text = f'Wind direction: {wind_direction}'
-        self.draw.text((10, 130), wind_direction_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 125), wind_direction_text, font=self.font, fill=self.text_color)
 
     def _draw_rain(self):
         """Draw rain on the display."""
         rain = self.weather_data['rain']
         rain_text = f'Rain: {rain} mm'
-        self.draw.text((10, 160), rain_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 155), rain_text, font=self.font, fill=self.text_color)
 
     def _draw_light(self):
         """Draw light on the display."""
         light = self.weather_data['light']
         light_text = f'Light: {light} lx'
-        self.draw.text((10, 190), light_text, font=self.font, fill=self.text_color)
+        self.draw.text((10, 185), light_text, font=self.font, fill=self.text_color)
 
-    def update_display(self, weather_data):
+    def update_display(self, weather_data, type):
         """Update the display."""
         self._erase_display()
+        self.type = type
         self.weather_data = weather_data
         self.draw.rectangle((0, 0, self.width, self.height), self.back_color)
         self._draw_weather_on_display()
