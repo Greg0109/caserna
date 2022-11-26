@@ -98,7 +98,7 @@ update-version-major:
 update-version-patch:
 	bump2version --current-version $(CURRENT_VERSION) patch --allow-dirty --no-commit
 
-update-version-alpha: ## updates the version in setup.cfg setup.py and __init__.py
+update-version-alpha: ## updates the version in setup.cfg setup.py and __init__.py NOT WORKING
 	bump2version --current-version $(CURRENT_VERSION) prerelease --allow-dirty --no-commit
 
 install: clean ## install the package to the active Python's site-packages

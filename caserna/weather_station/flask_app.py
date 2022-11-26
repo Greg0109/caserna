@@ -31,6 +31,38 @@ def weather_update():
         LOGGER.info(f'{sensor}: {data}')
     return data_json
 
+@app.route('/weather_average', methods=['GET'])
+def weather_average():
+    data = WEATHER_STATION.update_sensor_history()
+    data_json = {
+        'wind_speed': data['wind_speed'].get_average_value(),
+        'wind_direction': data['wind_direction'].get_average_value(),
+        'temperature': data['temperature'].get_average_value(),
+        'pressure': data['pressure'].get_average_value(),
+        'humidity': data['humidity'].get_average_value(),
+        'light': data['light'].get_average_value(),
+        'rain': data['rain'].get_average_value()
+    }
+    for sensor, data in data_json.items():
+        LOGGER.info(f'{sensor}: {data}')
+    return data_json
+
+@app.route('/weather_max', methods=['GET'])
+def weather_max():
+    data = WEATHER_STATION.update_sensor_history()
+    data_json = {
+        'wind_speed': data['wind_speed'].get_highest_value(),
+        'wind_direction': data['wind_direction'].get_highest_value(),
+        'temperature': data['temperature'].get_highest_value(),
+        'pressure': data['pressure'].get_highest_value(),
+        'humidity': data['humidity'].get_highest_value(),
+        'light': data['light'].get_highest_value(),
+        'rain': data['rain'].get_highest_value()
+    }
+    for sensor, data in data_json.items():
+        LOGGER.info(f'{sensor}: {data}')
+    return data_json
+
 @app.route('/weather_history', methods=['GET'])
 def weather_history():
     data = WEATHER_STATION.update_sensor_history()
