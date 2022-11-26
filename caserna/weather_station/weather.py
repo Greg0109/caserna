@@ -6,7 +6,9 @@ from caserna.weather_station.sensor_history import sensor_history_dictionary
 class WeatherStation():
     """The weather station."""
     def __init__(self):
+        offset = -7.5
         self.sensor = weatherhat.WeatherHAT()
+        self.sensor.temperature_offset = offset
         self.logger = GLog('Weather', {})
         self.sensor_history = sensor_history_dictionary()
 

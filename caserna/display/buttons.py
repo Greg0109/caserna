@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 from caserna.display.lcd import Display
 import requests
 import time
+import os
 
 class Buttons():
     """
@@ -41,15 +42,23 @@ class Buttons():
         elif label == 'B':
             self.weather_type = 'average'
         elif label == 'X':
-            self.weather_type = 'max'
-        elif label == 'Y':
             self.weather_type = 'off'
+        elif label == 'Y':
+            self.weather_type = 'shutdown'
 
-        if self.weather_type != 'off':
+        if self.weather_type == 'shutdown':
+            self.shutdown()
+        elif self.weather_type == 'off':
+            self.display.turn_off_display()
+        else:
             weather_data = self._get_weather()
             self.display.update_display(weather_data, self.weather_type)
-        else:
-            self.display.turn_off_display()
+
+    def shutdown(self):
+        """Shutdown the display."""
+        self.display.turn_off_display()
+        GPIO.cleanup()
+        os.system("sudo shutdown -h now")
 
     def attach_buttons(self):
         """Attach buttons to the handle_button function."""
