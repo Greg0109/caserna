@@ -30,6 +30,7 @@ class Display():
         self.font = ImageFont.truetype(UserFont, self.font_size)
         self.text_color = (255, 255, 255)
         self.back_color = (0, 170, 170)
+        self.black_color = (0, 0, 0)
         self.type = 'Update'
         atexit.register(self.turn_off_display)
 
@@ -99,21 +100,21 @@ class Display():
 
     def update_display(self, weather_data, type):
         """Update the display."""
-        self._erase_display()
+        self._erase_display(self.back_color)
         self.type = type
         self.weather_data = weather_data
         self.draw.rectangle((0, 0, self.width, self.height), self.back_color)
         self._draw_weather_on_display()
         self.display.display(self.img)
 
-    def _erase_display(self):
+    def _erase_display(self, color):
         """Erase the display."""
-        self.draw.rectangle((0, 0, self.width, self.height), self.back_color)
+        self.draw.rectangle((0, 0, self.width, self.height), color)
         self.display.display(self.img)
 
     def turn_off_display(self):
         """Turn off the display."""
-        self._erase_display()
+        self._erase_display(self.black_color)
         self.display.set_backlight(0)
 
 def main():
