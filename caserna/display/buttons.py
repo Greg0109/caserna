@@ -4,13 +4,6 @@ from caserna.display.lcd import Display
 import requests
 import time
 
-print("""buttons.py - Detect which button has been pressed
-This example should demonstrate how to:
-1. set up RPi.GPIO to read buttons,
-2. determine which button has been pressed
-Press Ctrl+C to exit!
-""")
-
 class Buttons():
     """
     This class handles the action for the buttons

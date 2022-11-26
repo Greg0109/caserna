@@ -19,10 +19,10 @@ def main():
             run()
     if args.display:
         if args.display[0] == 'test_lcd':
-            print('Running LCD')
+            print('Testing LCD')
             main_lcd()
         elif args.display[0] == 'display_weather':
-            print('Running buttons')
+            print('Display weather')
             Buttons()
     return 0
 

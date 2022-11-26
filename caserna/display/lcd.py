@@ -6,11 +6,6 @@ from fonts.ttf import ManropeBold as UserFont
 import time
 import atexit
 
-print(f"""
-lcd.py - Hello, World! example on the 1.54" LCD.
-Press Ctrl+C to exit!
-""")
-
 class Display():
     """
     This class handles the display where the weather data is shown.
@@ -63,43 +58,43 @@ class Display():
     def _draw_temperature(self):
         """Draw temperature on the display."""
         temperature = self.weather_data['temperature']
-        temperature_text = f'Temperature: {temperature}°C'
+        temperature_text = f'Temperature: {round(temperature, 2)}°C'
         self.draw.text((10, 5), temperature_text, font=self.font, fill=self.text_color)
     
     def _draw_humidity(self):
         """Draw humidity on the display."""
         humidity = self.weather_data['humidity']
-        humidity_text = f'Humidity: {humidity}%'
+        humidity_text = f'Humidity: {round(humidity, 2)}%'
         self.draw.text((10, 35), humidity_text, font=self.font, fill=self.text_color)
 
     def _draw_pressure(self):
         """Draw pressure on the display."""
         pressure = self.weather_data['pressure']
-        pressure_text = f'Pressure: {pressure} hPa'
+        pressure_text = f'Pressure: {round(pressure, 2)} hPa'
         self.draw.text((10, 65), pressure_text, font=self.font, fill=self.text_color)
 
     def _draw_wind_speed(self):
         """Draw wind speed on the display."""
         wind_speed = self.weather_data['wind_speed']
-        wind_speed_text = f'Wind speed: {wind_speed} km/h'
+        wind_speed_text = f'Wind speed: {round(wind_speed, 2)} km/h'
         self.draw.text((10, 95), wind_speed_text, font=self.font, fill=self.text_color)
 
     def _draw_wind_direction(self):
         """Draw wind direction on the display."""
         wind_direction = self.weather_data['wind_direction']
-        wind_direction_text = f'Wind direction: {wind_direction}'
+        wind_direction_text = f'Wind direction: {round(wind_direction, 2)}'
         self.draw.text((10, 125), wind_direction_text, font=self.font, fill=self.text_color)
 
     def _draw_rain(self):
         """Draw rain on the display."""
         rain = self.weather_data['rain']
-        rain_text = f'Rain: {rain} mm'
+        rain_text = f'Rain: {round(rain, 2)} mm'
         self.draw.text((10, 155), rain_text, font=self.font, fill=self.text_color)
 
     def _draw_light(self):
         """Draw light on the display."""
         light = self.weather_data['light']
-        light_text = f'Light: {light} lx'
+        light_text = f'Light: {round(light, 2)} lx'
         self.draw.text((10, 185), light_text, font=self.font, fill=self.text_color)
 
     def update_display(self, weather_data, type):
