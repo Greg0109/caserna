@@ -18,6 +18,7 @@ structlog==22.1.0
 
 # Weather monitoring
 weatherhat
+adafruit-io==2.7.0
 
 # Flask web server
 flask==2.0.2

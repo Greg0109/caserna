@@ -5,6 +5,7 @@ from caserna.weather_station.weather import WeatherStation
 from caserna.display.lcd import main as main_lcd
 from caserna.display.buttons import Buttons
 from caserna.weather_station.flask_app import run
+from caserna.weather_station.adafruit_upload import AdafruitUpload
 
 
 def main():
@@ -17,6 +18,10 @@ def main():
         if args.weather[0] == 'server':
             print('Running server')
             run()
+        elif args.weather[0] == 'upload':
+            print('Running upload')
+            upload = AdafruitUpload()
+            upload.upload_data()
     if args.display:
         if args.display[0] == 'test_lcd':
             print('Testing LCD')

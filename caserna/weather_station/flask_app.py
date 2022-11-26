@@ -17,15 +17,15 @@ def alive():
 
 @app.route('/weather_update', methods=['GET'])
 def weather_update():
-    data = WEATHER_STATION.update_sensor_history()
+    data = WEATHER_STATION.get_sensor_data()
     data_json = {
-        'wind_speed': data['wind_speed'].get_latest_value(),
-        'wind_direction': data['wind_direction'].get_latest_value(),
-        'temperature': data['temperature'].get_latest_value(),
-        'pressure': data['pressure'].get_latest_value(),
-        'humidity': data['humidity'].get_latest_value(),
-        'light': data['light'].get_latest_value(),
-        'rain': data['rain'].get_latest_value()
+        'wind_speed': data['wind_speed'],
+        'wind_direction': data['wind_direction'],
+        'temperature': data['temperature'],
+        'pressure': data['pressure'],
+        'humidity': data['humidity'],
+        'light': data['light'],
+        'rain': data['rain']
     }
     for sensor, data in data_json.items():
         LOGGER.info(f'{sensor}: {data}')
