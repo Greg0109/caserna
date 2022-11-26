@@ -119,3 +119,9 @@ install-requirements:  ## install requirements
 
 run-app: ## run the app
 	python3 caserna/flask_app.py
+
+create-grafana-storage: ## creates the grafana storage
+	docker volume create grafana-storage
+
+run-grafana: create-grafana-storage ## run the app
+	docker run -d -p 3000:3000 --name=grafana -v grafana-storage:/var/lib/grafana grafana/grafana-enterprise
