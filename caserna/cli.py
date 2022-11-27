@@ -1,7 +1,6 @@
 """Console script for caserna."""
 import argparse
 import sys
-from caserna.weather_station.weather import WeatherStation
 from caserna.display.lcd import main as main_lcd
 from caserna.display.buttons import Buttons
 from caserna.weather_station.flask_app import run
@@ -22,6 +21,10 @@ def main():
             print('Running upload')
             upload = AdafruitUpload()
             upload.upload_data()
+        elif args.weather[0] == 'delete_data':
+            print('Deleting data')
+            upload = AdafruitUpload()
+            upload.erase_all_data_from_feeds()
     if args.display:
         if args.display[0] == 'test_lcd':
             print('Testing LCD')

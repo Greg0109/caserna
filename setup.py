@@ -43,6 +43,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Greg0109/caserna',
-    version='0.3.9',
+    version='0.3.11',
     zip_safe=False,
 )

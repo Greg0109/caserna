@@ -81,3 +81,29 @@ class AdafruitUpload():
         self.aio.send_data(self.windspeed_feed.key, data['wind_speed'])
         self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
         self.aio.send_data(self.rain_feed.key, data['rain'])
+
+    def erase_all_data_from_feeds(self):
+        """
+        This method erases all data from the feeds
+        """
+        temperature_data = self.aio.data(self.temperature_feed.key)
+        for data in temperature_data:
+            self.aio.delete(self.temperature_feed.key, data.id)
+        humidity_data = self.aio.data(self.humidity_feed.key)
+        for data in humidity_data:
+            self.aio.delete(self.humidity_feed.key, data.id)
+        pressure_data = self.aio.data(self.pressure_feed.key)
+        for data in pressure_data:
+            self.aio.delete(self.pressure_feed.key, data.id)
+        light_data = self.aio.data(self.light_feed.key)
+        for data in light_data:
+            self.aio.delete(self.light_feed.key, data.id)
+        windspeed_data = self.aio.data(self.windspeed_feed.key)
+        for data in windspeed_data:
+            self.aio.delete(self.windspeed_feed.key, data.id)
+        winddirection_data = self.aio.data(self.winddirection_feed.key)
+        for data in winddirection_data:
+            self.aio.delete(self.winddirection_feed.key, data.id)
+        rain_data = self.aio.data(self.rain_feed.key)
+        for data in rain_data:
+            self.aio.delete(self.rain_feed.key, data.id)
