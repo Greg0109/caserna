@@ -1,37 +1,41 @@
 """Console script for caserna."""
 import argparse
 import sys
-from caserna.display.lcd import main as main_lcd
-from caserna.display.buttons import Buttons
-from caserna.weather_station.flask_app import run
-from caserna.weather_station.adafruit_upload import AdafruitUpload
+from subprocess import PIPE, run
+from caserna.weather_station.display import main as main_lcd
+import os
+from glog import GLog
 
+logger = GLog('Caserna', {})
+
+def out(command):
+    result = run(command, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
+    return result.stdout
+
+def check_process(script):
+    """Check if a process is running"""
+    script_name = script.replace('/home/pi/.local/bin/fred --master ', '')
+    script_name = script_name.replace('fred --master ', '')
+    script_name = script.replace('fred -m ', '')
+    process = str(out(f'ps -ax | grep -i "{script_name}" | grep -v -i "script_manager" | grep -v -i grep'))
+    if not process:
+        os.system(f'screen -dm -S "{script_name}" {script}')
+    else:
+        logger.info(f'{script_name} already running, exiting program...')
+        exit()
 
 def main():
     """Console script for caserna."""
     parser = argparse.ArgumentParser()
     parser.add_argument('-w', '--weather', nargs='*')
-    parser.add_argument('-d', '--display', nargs='*')
     args = parser.parse_args()
     if args.weather:
-        if args.weather[0] == 'server':
-            print('Running server')
-            run()
-        elif args.weather[0] == 'upload':
-            print('Running upload')
-            upload = AdafruitUpload()
-            upload.upload_data()
-        elif args.weather[0] == 'delete_data':
-            print('Deleting data')
-            upload = AdafruitUpload()
-            upload.erase_all_data_from_feeds()
-    if args.display:
-        if args.display[0] == 'test_lcd':
-            print('Testing LCD')
+        if args.weather[0] == 'activate':
+            logger.info('Activate screen')
+            check_process('caserna -w weather_station')
+        elif args.weather[0] == 'weather_station':
+            logger.info('Start weather station')
             main_lcd()
-        elif args.display[0] == 'display_weather':
-            print('Display weather')
-            Buttons()
     return 0
 
 

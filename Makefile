@@ -106,7 +106,6 @@ install: clean ## install the package to the active Python's site-packages
 install-ega: clean dist update-version-patch ## installs the package on the server
 	scp dist/*.whl ega:Desktop/
 	ssh ega "pip install ~/Desktop/*.whl"
-	ssh ega "sudo pip install ~/Desktop/*.whl"
 	ssh ega "rm ~/Desktop/*.whl"
 
 env-create:  ## creates a virtual environment using tox
