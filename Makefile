@@ -20,6 +20,7 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
+export SERVER_IP = 10.242.41.248
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
@@ -104,9 +105,9 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 install-ega: clean dist update-version-patch ## installs the package on the server
-	scp dist/*.whl ega:Desktop/
-	ssh ega "pip install ~/Desktop/*.whl"
-	ssh ega "rm ~/Desktop/*.whl"
+	scp dist/*.whl pi@$(SERVER_IP):Desktop/
+	ssh pi@$(SERVER_IP) "pip install ~/Desktop/*.whl"
+	ssh pi@$(SERVER_IP) "rm ~/Desktop/*.whl"
 
 env-create:  ## creates a virtual environment using tox
 	tox -e caserna --recreate

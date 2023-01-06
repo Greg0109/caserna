@@ -20,6 +20,7 @@ class AdafruitUpload():
         self.dashboard = None
         self.logger = GLog('AdafruitUpload', {
             'write_to_file': True,
+            'send_errors': True,
             'file_name': 'adafruit_upload.log',
             'file_path': '/home/pi/Desktop/'
         })
