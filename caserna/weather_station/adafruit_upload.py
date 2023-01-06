@@ -10,7 +10,6 @@ class AdafruitUpload():
     """
 
     def __init__(self):
-        self.aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
         self.temperature_feed = None
         self.humidity_feed = None
         self.pressure_feed = None
@@ -19,9 +18,17 @@ class AdafruitUpload():
         self.winddirection_feed = None
         self.rain_feed = None
         self.dashboard = None
-        self.logger = GLog('AdafruitUpload', {})
-        self.create_dashboard()
-        self.create_and_assing_feeds()
+        self.logger = GLog('AdafruitUpload', {
+            'write_to_file': True,
+            'file_name': 'adafruit_upload.log',
+            'file_path': '/home/pi/Desktop/'
+        })
+        try:
+            self.aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
+            self.create_dashboard()
+            self.create_and_assing_feeds()
+        except RequestError as error:
+            self.logger.error(error)
 
     def create_and_assing_feeds(self):
         """
@@ -65,16 +72,19 @@ class AdafruitUpload():
         """
         This method uploads the data to Adafruit IO
         """
-        self.aio.send_data(self.temperature_feed.key, data['temperature'])
-        self.aio.send_data(self.humidity_feed.key, data['humidity'])
-        self.aio.send_data(self.pressure_feed.key, data['pressure'])
-        self.aio.send_data(self.light_feed.key, data['light'])
-        self.aio.send_data(self.windspeed_feed.key, data['wind_speed'])
-        self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
-        self.aio.send_data(self.rain_feed.key, data['rain'])
-        self.logger.info("Data uploaded to Adafruit IO")
-        for sensor, data_point in data.items():
-            self.logger.info(f"{sensor}: {data_point}")
+        try:
+            self.aio.send_data(self.temperature_feed.key, data['temperature'])
+            self.aio.send_data(self.humidity_feed.key, data['humidity'])
+            self.aio.send_data(self.pressure_feed.key, data['pressure'])
+            self.aio.send_data(self.light_feed.key, data['light'])
+            self.aio.send_data(self.windspeed_feed.key, data['wind_speed'])
+            self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
+            self.aio.send_data(self.rain_feed.key, data['rain'])
+            self.logger.info("Data uploaded to Adafruit IO")
+            for sensor, data_point in data.items():
+                self.logger.info(f"{sensor}: {data_point}")
+        except RequestError as error:
+            self.logger.error(error)
 
     def erase_all_data_from_feeds(self):
         """
