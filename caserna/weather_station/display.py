@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 import weatherhat
 from weatherhat import history
 from caserna.weather_station.adafruit_upload import AdafruitUpload
+from glog import GLog
 
 
 FPS = 10
@@ -667,20 +668,32 @@ class SensorData:
 
         # Track previous average values to give the compass a trail
         self.needle_trail = []
-        self.uploader = AdafruitUpload()
+
+        self.uploader = None
+        try:
+            self.uploader = AdafruitUpload()
+        except Exception as error:
+            self.uploader = None
+            GLog('Caserna', {
+                'write_to_file': True,
+                'send_errors': True,
+                'file_name': 'caserna.log',
+                'file_path': '/home/pi/Desktop/'
+            }).error(error)
 
     def update_data_to_upload(self):
-        data_points = {
-            "temperature": self.sensor.temperature,
-            "humidity": self.sensor.humidity,
-            "pressure": self.sensor.pressure,
-            "light": self.sensor.lux,
-            "wind_speed": self.sensor.wind_speed,
-            "wind_direction": self.sensor.wind_direction,
-            "rain": self.sensor.rain_total,
-        }
+        if self.uploader:
+            data_points = {
+                "temperature": self.sensor.temperature,
+                "humidity": self.sensor.humidity,
+                "pressure": self.sensor.pressure,
+                "light": self.sensor.lux,
+                "wind_speed": self.sensor.wind_speed,
+                "wind_direction": self.sensor.wind_direction,
+                "rain": self.sensor.rain_total,
+            }
+            self.uploader.upload_data(data_points)
 
-        self.uploader.upload_data(data_points)
         
     def update(self, interval=5.0):
         self.sensor.temperature_offset = OFFSET

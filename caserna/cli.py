@@ -14,9 +14,7 @@ def out(command):
 
 def check_process(script):
     """Check if a process is running"""
-    script_name = script.replace('/home/pi/.local/bin/fred --master ', '')
-    script_name = script_name.replace('fred --master ', '')
-    script_name = script.replace('fred -m ', '')
+    script_name = script.replace('caserna -w ', '')
     process = str(out(f'ps -ax | grep -i "{script_name}" | grep -v -i "script_manager" | grep -v -i grep'))
     if not process:
         os.system(f'screen -dm -S "{script_name}" {script}')

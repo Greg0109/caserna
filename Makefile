@@ -20,7 +20,7 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
-export SERVER_IP = 10.242.41.248
+export SERVER_IP = ega.local
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
