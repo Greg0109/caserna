@@ -106,3 +106,7 @@ ENV/
 .vscode/
 .idea/
 TODO
+
+# docker stuff
+docker/db_data/
+docker/grafana_data/

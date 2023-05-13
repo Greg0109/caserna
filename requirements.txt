@@ -20,5 +20,5 @@ structlog==22.1.0
 weatherhat
 adafruit-io==2.7.0
 
-# Flask web server
-flask==2.0.2
+# Database
+psycopg2==2.9.6

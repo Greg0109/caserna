@@ -1,0 +1,47 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: caserna_db
+    environment:
+      POSTGRES_USER: greg
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: caserna
+    restart: unless-stopped
+    ports:
+      - "10995:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data:Z
+    networks:
+      - caserna_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U greg -d caserna -h localhost -p 5432"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: caserna_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: caserna_db
+      GF_DATABASE_PORT: 10995
+      GF_DATABASE_NAME: caserna
+      GF_DATABASE_USER: greg
+      GF_DATABASE_PASSWORD: 1234
+      GF_SECURITY_ADMIN_USER: greg
+      GF_SECURITY_ADMIN_PASSWORD: 1234
+    depends_on:
+      - db
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - caserna_net
+
+networks:
+  caserna_net:
+    driver: bridge

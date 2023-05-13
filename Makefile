@@ -124,3 +124,9 @@ create-grafana-storage: ## creates the grafana storage
 
 run-grafana: create-grafana-storage ## run the app
 	docker run -d -p 3000:3000 --name=grafana -v grafana-storage:/var/lib/grafana grafana/grafana-enterprise
+
+start-db: ## starts the database
+	docker-compose -f docker/docker-compose.yml up -d --force-recreate
+
+stop-db: ## stops the database
+	docker-compose -f docker/docker-compose.yml down

@@ -1,5 +1,7 @@
 from Adafruit_IO import Client, Feed, Dashboard, RequestError
 from glog import GLog
+from caserna.constants import *
+from caserna.weather_station.crud import PostgresCRUD
 
 ADAFRUIT_IO_KEY = 'aio_ywME22AR8MY156ONa8NESVronCNz'
 ADAFRUIT_IO_USERNAME = 'GRabago'
@@ -28,6 +30,13 @@ class AdafruitUpload():
             self.aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
             self.create_dashboard()
             self.create_and_assing_feeds()
+            self.crud = PostgresCRUD(
+                host=POSTGRES_HOST,
+                database=POSTGRES_DB,
+                user=POSTGRES_USER,
+                password=POSTGRES_PASSWORD,
+                port=POSTGRES_PORT
+            )
         except RequestError as error:
             self.logger.error(error)
 
@@ -69,6 +78,13 @@ class AdafruitUpload():
 
         self.dashboard = self.aio.dashboards('weather-dashboard')
 
+    def upload_to_db(self, data):
+        """
+        This method uploads the data to the database
+        """
+        for key, value in data.items():
+            self.crud.insert_record(key, value)
+
     def upload_data(self, data):
         """
         This method uploads the data to Adafruit IO
@@ -82,6 +98,8 @@ class AdafruitUpload():
             self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
             self.aio.send_data(self.rain_feed.key, data['rain'])
             self.logger.info("Data uploaded to Adafruit IO")
+            self.upload_to_db(data)
+            self.logger.info("Data uploaded to database")
             for sensor, data_point in data.items():
                 self.logger.info(f"{sensor}: {data_point}")
         except RequestError as error:
