@@ -83,7 +83,9 @@ class AdafruitUpload():
         This method uploads the data to the database
         """
         for key, value in data.items():
+            self.logger.info(f"{key}: {value}")
             self.crud.insert_record(key, value)
+        self.logger.info("Data uploaded to database")
 
     def upload_data(self, data):
         """
@@ -98,12 +100,10 @@ class AdafruitUpload():
             self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
             self.aio.send_data(self.rain_feed.key, data['rain'])
             self.logger.info("Data uploaded to Adafruit IO")
-            self.upload_to_db(data)
-            self.logger.info("Data uploaded to database")
-            for sensor, data_point in data.items():
-                self.logger.info(f"{sensor}: {data_point}")
         except RequestError as error:
             self.logger.error(error)
+        finally:
+            self.upload_to_db(data)
 
     def erase_all_data_from_feeds(self):
         """
