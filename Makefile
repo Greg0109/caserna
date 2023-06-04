@@ -20,7 +20,8 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
-export SERVER_IP = ega.local
+SERVER_IP ?= caserna.local
+export SERVER_IP
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
@@ -105,9 +106,9 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 install-ega: clean dist update-version-patch ## installs the package on the server
-	scp dist/*.whl pi@$(SERVER_IP):Desktop/
-	ssh pi@$(SERVER_IP) "pip install ~/Desktop/*.whl"
-	ssh pi@$(SERVER_IP) "rm ~/Desktop/*.whl"
+	scp dist/*.whl greg@$(SERVER_IP):Desktop/
+	ssh greg@$(SERVER_IP) "pip3 install ~/Desktop/*.whl"
+	ssh greg@$(SERVER_IP) "rm ~/Desktop/*.whl"
 
 env-create:  ## creates a virtual environment using tox
 	tox -e caserna --recreate
@@ -123,10 +124,35 @@ create-grafana-storage: ## creates the grafana storage
 	docker volume create grafana-storage
 
 run-grafana: create-grafana-storage ## run the app
-	docker run -d -p 3000:3000 --name=grafana -v grafana-storage:/var/lib/grafana grafana/grafana-enterprise
+	docker run -d -p 3000:3000 --name=grafana -v grafana-storage:/var/lib/grafana caserna_grafana:latest
 
 start-db: ## starts the database
 	docker-compose -f docker/docker-compose.yml up -d --force-recreate
 
 stop-db: ## stops the database
 	docker-compose -f docker/docker-compose.yml down
+
+build-grafana:
+	docker build -t caserna_grafana -f docker/grafana_docker/Dockerfile .
+
+build-caserna: clean dist update-version-patch
+	docker build -t caserna -f docker/Dockerfile .
+	rm -rf dist/
+	rm -rf build/
+
+build-all: build-grafana build-caserna
+
+save-dockers: build-all
+	docker save caserna_grafana:latest | gzip > docker/caserna_grafana.tar.gz
+	docker save caserna:latest | gzip > docker/caserna.tar.gz
+
+send-dockers: save-dockers
+	scp docker/caserna_grafana.tar.gz greg@$(SERVER_IP):Desktop/
+	scp docker/caserna.tar.gz greg@$(SERVER_IP):Desktop/
+	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna_grafana.tar.gz"
+	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna.tar.gz"
+	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna_grafana.tar.gz"
+	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna.tar.gz"
+
+env-compile:
+	pip-compile --output-file requirements.txt requirements.in

@@ -21,7 +21,7 @@ def create_db_instance():
     This method creates a PostgresCRUD instance
     """
     return PostgresCRUD(
-        host=POSTGRES_HOST,
+        host='192.168.11.18',
         database=POSTGRES_DB,
         user=POSTGRES_USER,
         password=POSTGRES_PASSWORD,

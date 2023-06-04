@@ -110,3 +110,5 @@ TODO
 # docker stuff
 docker/db_data/
 docker/grafana_data/
+docker/data/
+*.tar.gz
