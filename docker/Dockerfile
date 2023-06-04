@@ -1,9 +1,11 @@
-FROM 2000cubits/raspbian:buster
+FROM 2000cubits/raspbian:bullseye.latest
+
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y python3-pip python3-rpi.gpio aptitude && \
-    aptitude install libjpeg62 libopenjp2-7 libtiff5 libpq5 libjpeg62-turbo -y && \
+    aptitude install libjpeg62 libopenjp2-7 libtiff5 libpq5 libjpeg62-turbo libatlas-base-dev libxcb-xinerama0 libfreetype6 -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

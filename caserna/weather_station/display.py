@@ -675,10 +675,7 @@ class SensorData:
         except Exception as error:
             self.uploader = None
             GLog('Caserna', {
-                'write_to_file': True,
                 'send_errors': True,
-                'file_name': 'caserna.log',
-                'file_path': '/home/pi/Desktop/'
             }).error(error)
 
     def update_data_to_upload(self):

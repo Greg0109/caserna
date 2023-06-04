@@ -23,6 +23,8 @@ export PRINT_HELP_PYSCRIPT
 SERVER_IP ?= caserna.local
 export SERVER_IP
 
+export CRYPTOGRAPHY_DONT_BUILD_RUST=1
+
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 CURRENT_VERSION = $(shell python setup.py --version)
@@ -156,3 +158,12 @@ send-dockers: save-dockers
 
 env-compile:
 	pip-compile --output-file requirements.txt requirements.in
+
+save-caserna: build-caserna
+	docker save caserna:latest | gzip > docker/caserna.tar.gz
+
+send-caserna: save-caserna
+	scp docker/caserna.tar.gz greg@$(SERVER_IP):Desktop/
+	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna.tar.gz"
+	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna.tar.gz"
+

@@ -1,6 +1,6 @@
 version: "3"
 services:
-  db:
+  caserna_db:
     image: postgres:latest
     container_name: caserna_db
     environment:
@@ -25,7 +25,7 @@ services:
     privileged: true
     restart: unless-stopped
     depends_on:
-      - db
+      - caserna_db
     networks:
       - caserna_net
   grafana:
@@ -43,7 +43,7 @@ services:
       GF_SECURITY_ADMIN_USER: greg
       GF_SECURITY_ADMIN_PASSWORD: 1234
     depends_on:
-      - db
+      - caserna_db
     volumes:
       - ./grafana_data:/var/lib/grafana
     restart: unless-stopped
