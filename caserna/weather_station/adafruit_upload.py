@@ -20,20 +20,17 @@ class AdafruitUpload():
         self.winddirection_feed = None
         self.rain_feed = None
         self.dashboard = None
-        self.logger = GLog('AdafruitUpload', {})
+        self.crud = None
+        self.aio = None
+        self.logger = GLog('DataUpload', {})
+
+    def adafruit_connect(self):
         try:
             self.aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
             self.create_dashboard()
             self.create_and_assing_feeds()
-            self.crud = PostgresCRUD(
-                host=POSTGRES_HOST,
-                database=POSTGRES_DB,
-                user=POSTGRES_USER,
-                password=POSTGRES_PASSWORD,
-                port=POSTGRES_PORT
-            )
         except RequestError as error:
-            self.logger.error(error)
+            raise error
 
     def create_and_assing_feeds(self):
         """
@@ -51,14 +48,20 @@ class AdafruitUpload():
             self.logger.info("Feeds created!")
         except RequestError:
             self.logger.info("Feeds already exist!")
+        except BaseException as error:
+            raise error
 
-        self.temperature_feed = self.aio.feeds('temperature')
-        self.humidity_feed = self.aio.feeds('relative-humidity')
-        self.pressure_feed = self.aio.feeds('pressure')
-        self.light_feed = self.aio.feeds('light')
-        self.windspeed_feed = self.aio.feeds('wind-speed')
-        self.winddirection_feed = self.aio.feeds('wind-direction')
-        self.rain_feed = self.aio.feeds('rain')
+        try:
+            self.temperature_feed = self.aio.feeds('temperature')
+            self.humidity_feed = self.aio.feeds('relative-humidity')
+            self.pressure_feed = self.aio.feeds('pressure')
+            self.light_feed = self.aio.feeds('light')
+            self.windspeed_feed = self.aio.feeds('wind-speed')
+            self.winddirection_feed = self.aio.feeds('wind-direction')
+            self.rain_feed = self.aio.feeds('rain')
+        except BaseException as error:
+            raise error
+
 
     def create_dashboard(self):
         """
@@ -70,23 +73,20 @@ class AdafruitUpload():
             self.logger.info("Dashboard created!")
         except RequestError:
             self.logger.info("Dashboard already exists!")
+        except BaseException as error:
+            raise error
 
-        self.dashboard = self.aio.dashboards('weather-dashboard')
-
-    def upload_to_db(self, data):
-        """
-        This method uploads the data to the database
-        """
-        for key, value in data.items():
-            self.logger.info(f"{key}: {value}")
-            self.crud.insert_record(key, value)
-        self.logger.info("Data uploaded to database")
-
-    def upload_data(self, data):
+        try:
+            self.dashboard = self.aio.dashboards('weather-dashboard')
+        except BaseException as error:
+            raise error
+        
+    def upload_data_to_adafruit(self, data):
         """
         This method uploads the data to Adafruit IO
         """
         try:
+            self.adafruit_connect()
             self.aio.send_data(self.temperature_feed.key, data['temperature'])
             self.aio.send_data(self.humidity_feed.key, data['humidity'])
             self.aio.send_data(self.pressure_feed.key, data['pressure'])
@@ -97,8 +97,8 @@ class AdafruitUpload():
             self.logger.info("Data uploaded to Adafruit IO")
         except RequestError as error:
             self.logger.error(error)
-        finally:
-            self.upload_to_db(data)
+        except BaseException as error:
+            self.logger.error(f"Unknown error adafruit: {error}")
 
     def erase_all_data_from_feeds(self):
         """
@@ -125,3 +125,27 @@ class AdafruitUpload():
         rain_data = self.aio.data(self.rain_feed.key)
         for data in rain_data:
             self.aio.delete(self.rain_feed.key, data.id)
+
+        
+    def connect_db(self):
+        """
+        This method connects to the postgres db
+        """
+        self.crud = PostgresCRUD(
+            host=POSTGRES_HOST,
+            database=POSTGRES_DB,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            port=POSTGRES_PORT
+        )
+
+    def upload_to_db(self, data):
+        """
+        This method uploads the data to the database
+        """
+        self.connect_db()
+        self.logger.info("Uploading data to database")
+        for key, value in data.items():
+            self.logger.info(f"{key}: {value}")
+            self.crud.insert_record(key, value)
+        self.logger.info("Data uploaded to database")

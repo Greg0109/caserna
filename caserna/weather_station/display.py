@@ -14,6 +14,7 @@ import weatherhat
 from weatherhat import history
 from caserna.weather_station.adafruit_upload import AdafruitUpload
 from glog import GLog
+import os
 
 
 FPS = 10
@@ -669,27 +670,21 @@ class SensorData:
         # Track previous average values to give the compass a trail
         self.needle_trail = []
 
-        self.uploader = None
-        try:
-            self.uploader = AdafruitUpload()
-        except Exception as error:
-            self.uploader = None
-            GLog('Caserna', {
-                'send_errors': True,
-            }).error(error)
+        self.uploader = AdafruitUpload()
 
     def update_data_to_upload(self):
-        if self.uploader:
-            data_points = {
-                "temperature": self.sensor.temperature,
-                "humidity": self.sensor.humidity,
-                "pressure": self.sensor.pressure,
-                "light": self.sensor.lux,
-                "wind_speed": self.sensor.wind_speed,
-                "wind_direction": self.sensor.wind_direction,
-                "rain": self.sensor.rain_total,
-            }
-            self.uploader.upload_data(data_points)
+        data_points = {
+            "temperature": self.sensor.temperature,
+            "humidity": self.sensor.humidity,
+            "pressure": self.sensor.pressure,
+            "light": self.sensor.lux,
+            "wind_speed": self.sensor.wind_speed,
+            "wind_direction": self.sensor.wind_direction,
+            "rain": self.sensor.rain_total,
+        }
+        self.uploader.upload_to_db(data_points)
+        if os.environ.get('UPLOAD_TO_ADAFRUIT') == 'True':
+            self.uploader.upload_data_to_adafruit(data_points)
 
         
     def update(self, interval=5.0):
