@@ -167,3 +167,5 @@ send-caserna: save-caserna
 	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna.tar.gz"
 	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna.tar.gz"
 
+send-docker:
+	scp docker/docker-compose.yml greg@$(SERVER_IP):Desktop/

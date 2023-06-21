@@ -26,6 +26,7 @@ services:
     restart: unless-stopped
     environment:
       UPLOAD_TO_ADAFRUIT: 'False'
+      TZ: 'Europe/Madrid'
     depends_on:
       - caserna_db
     networks:
