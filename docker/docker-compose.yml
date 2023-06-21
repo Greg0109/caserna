@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: greg
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: caserna
+      TZ: 'Europe/Madrid'
     restart: unless-stopped
     ports:
       - "10995:5432"
@@ -45,6 +46,7 @@ services:
       GF_DATABASE_PASSWORD: 1234
       GF_SECURITY_ADMIN_USER: greg
       GF_SECURITY_ADMIN_PASSWORD: 1234
+      TZ: 'Europe/Madrid'
     depends_on:
       - caserna_db
     volumes:
