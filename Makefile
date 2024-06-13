@@ -21,7 +21,9 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 SERVER_IP ?= caserna.local
+USERNAME ?= yoyo
 export SERVER_IP
+export USER
 
 export CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
@@ -108,9 +110,9 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 install-ega: clean dist update-version-patch ## installs the package on the server
-	scp dist/*.whl greg@$(SERVER_IP):Desktop/
-	ssh greg@$(SERVER_IP) "pip3 install ~/Desktop/*.whl"
-	ssh greg@$(SERVER_IP) "rm ~/Desktop/*.whl"
+	scp dist/*.whl $(USERNAME)@$(SERVER_IP):~/
+	ssh $(USERNAME)@$(SERVER_IP) "pip3 install ~/~/*.whl"
+	ssh $(USERNAME)@$(SERVER_IP) "rm ~/~/*.whl"
 
 env-create:  ## creates a virtual environment using tox
 	tox -e caserna --recreate
@@ -149,12 +151,12 @@ save-dockers: build-all
 	docker save caserna:latest | gzip > docker/caserna.tar.gz
 
 send-dockers: save-dockers
-	scp docker/caserna_grafana.tar.gz greg@$(SERVER_IP):Desktop/
-	scp docker/caserna.tar.gz greg@$(SERVER_IP):Desktop/
-	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna_grafana.tar.gz"
-	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna.tar.gz"
-	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna_grafana.tar.gz"
-	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna.tar.gz"
+	scp docker/caserna_grafana.tar.gz $(USERNAME)@$(SERVER_IP):~/
+	scp docker/caserna.tar.gz $(USERNAME)@$(SERVER_IP):~/
+	ssh $(USERNAME)@$(SERVER_IP) "docker load < ~/caserna_grafana.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "docker load < ~/caserna.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "rm ~/caserna_grafana.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "rm ~/caserna.tar.gz"
 
 env-compile:
 	pip-compile --output-file requirements.txt requirements.in
@@ -163,9 +165,9 @@ save-caserna: build-caserna
 	docker save caserna:latest | gzip > docker/caserna.tar.gz
 
 send-caserna: save-caserna
-	scp docker/caserna.tar.gz greg@$(SERVER_IP):Desktop/
-	ssh greg@$(SERVER_IP) "docker load < ~/Desktop/caserna.tar.gz"
-	ssh greg@$(SERVER_IP) "rm ~/Desktop/caserna.tar.gz"
+	scp docker/caserna.tar.gz $(USERNAME)@$(SERVER_IP):~/
+	ssh $(USERNAME)@$(SERVER_IP) "docker load < ~/~/caserna.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "rm ~/~/caserna.tar.gz"
 
 send-docker:
-	scp docker/docker-compose.yml greg@$(SERVER_IP):Desktop/
+	scp docker/docker-compose.yml $(USERNAME)@$(SERVER_IP):~/
