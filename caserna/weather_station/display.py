@@ -13,7 +13,6 @@ from PIL import Image, ImageDraw, ImageFont
 import weatherhat
 from weatherhat import history
 from caserna.weather_station.adafruit_upload import AdafruitUpload
-from glog import GLog
 import os
 
 
@@ -686,7 +685,7 @@ class SensorData:
         if os.environ.get('UPLOAD_TO_ADAFRUIT') == 'True':
             self.uploader.upload_data_to_adafruit(data_points)
 
-        
+
     def update(self, interval=5.0):
         self.sensor.temperature_offset = OFFSET
         self.sensor.update(interval)

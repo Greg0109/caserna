@@ -12,13 +12,12 @@ pyyaml==6.0
 cryptography==3.4
 
 # common
-glog-pushover==1.0.1
 pydantic==1.10.2
 structlog==22.1.0
 
 # Weather monitoring
 weatherhat
-adafruit-io==2.7.0
+adafruit-io==2.7.2
 numpy==1.20.3
 spidev==3.6
 fonts==0.0.3

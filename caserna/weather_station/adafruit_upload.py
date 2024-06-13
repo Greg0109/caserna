@@ -1,5 +1,4 @@
 from Adafruit_IO import Client, Feed, Dashboard, RequestError
-from glog import GLog
 from caserna.constants import *
 from caserna.weather_station.crud import PostgresCRUD
 
@@ -22,7 +21,6 @@ class AdafruitUpload():
         self.dashboard = None
         self.crud = None
         self.aio = None
-        self.logger = GLog('DataUpload', {})
 
     def adafruit_connect(self):
         try:
@@ -45,9 +43,9 @@ class AdafruitUpload():
             self.aio.create_feed(Feed(name="Wind Speed"))
             self.aio.create_feed(Feed(name="Wind Direction"))
             self.aio.create_feed(Feed(name="Rain"))
-            self.logger.info("Feeds created!")
+            print("Feeds created!")
         except RequestError:
-            self.logger.info("Feeds already exist!")
+            print("Feeds already exist!")
         except BaseException as error:
             raise error
 
@@ -70,9 +68,9 @@ class AdafruitUpload():
         # Create new dashboard
         try:
             self.dashboard = self.aio.create_dashboard(Dashboard(name="Weather Dashboard"))
-            self.logger.info("Dashboard created!")
+            print("Dashboard created!")
         except RequestError:
-            self.logger.info("Dashboard already exists!")
+            print("Dashboard already exists!")
         except BaseException as error:
             raise error
 
@@ -80,7 +78,7 @@ class AdafruitUpload():
             self.dashboard = self.aio.dashboards('weather-dashboard')
         except BaseException as error:
             raise error
-        
+
     def upload_data_to_adafruit(self, data):
         """
         This method uploads the data to Adafruit IO
@@ -94,11 +92,11 @@ class AdafruitUpload():
             self.aio.send_data(self.windspeed_feed.key, data['wind_speed'])
             self.aio.send_data(self.winddirection_feed.key, data['wind_direction'])
             self.aio.send_data(self.rain_feed.key, data['rain'])
-            self.logger.info("Data uploaded to Adafruit IO")
+            print("Data uploaded to Adafruit IO")
         except RequestError as error:
-            self.logger.error(error)
+            print(error)
         except BaseException as error:
-            self.logger.error(f"Unknown error adafruit: {error}")
+            print(f"Unknown error adafruit: {error}")
 
     def erase_all_data_from_feeds(self):
         """
@@ -126,7 +124,7 @@ class AdafruitUpload():
         for data in rain_data:
             self.aio.delete(self.rain_feed.key, data.id)
 
-        
+
     def connect_db(self):
         """
         This method connects to the postgres db
@@ -144,8 +142,8 @@ class AdafruitUpload():
         This method uploads the data to the database
         """
         self.connect_db()
-        self.logger.info("Uploading data to database")
+        print("Uploading data to database")
         for key, value in data.items():
-            self.logger.info(f"{key}: {value}")
+            print(f"{key}: {value}")
             self.crud.insert_record(key, value)
-        self.logger.info("Data uploaded to database")
+        print("Data uploaded to database")

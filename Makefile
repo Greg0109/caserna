@@ -146,7 +146,7 @@ build-caserna: clean dist update-version-patch
 
 build-all: build-grafana build-caserna
 
-save-dockers: build-all
+save-dockers:
 	docker save caserna_grafana:latest | gzip > docker/caserna_grafana.tar.gz
 	docker save caserna:latest | gzip > docker/caserna.tar.gz
 
@@ -166,8 +166,8 @@ save-caserna: build-caserna
 
 send-caserna: save-caserna
 	scp docker/caserna.tar.gz $(USERNAME)@$(SERVER_IP):~/
-	ssh $(USERNAME)@$(SERVER_IP) "docker load < ~/~/caserna.tar.gz"
-	ssh $(USERNAME)@$(SERVER_IP) "rm ~/~/caserna.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "docker load < ~/caserna.tar.gz"
+	ssh $(USERNAME)@$(SERVER_IP) "rm ~/caserna.tar.gz"
 
 send-docker:
 	scp docker/docker-compose.yml $(USERNAME)@$(SERVER_IP):~/

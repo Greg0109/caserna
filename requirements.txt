@@ -34,8 +34,6 @@ font-manrope==0.0.2
     # via -r requirements.in
 fonts==0.0.3
     # via -r requirements.in
-glog-pushover==1.0.1
-    # via -r requirements.in
 i2cdevice==0.0.7
     # via
     #   ltr559
