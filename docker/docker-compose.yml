@@ -1,4 +1,16 @@
 services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token eyJhIjoiMDllMzM5Mzk3YmJlMzAyY2Q1MTEwODAzZThiZDNiYjAiLCJ0IjoiODVjYmNmYWUtMTkzNS00OWM5LTg1NTUtODkwZTVkODgxMGQ5IiwicyI6Ik1UWXlZekJqTkRjdE5XRmtaUzAwWkRrNExXSXhNVFl0WVdaak5XUXpaREptTWpKbCJ9
+    depends_on:
+      - caserna
+      - caserna_db
+      - grafana
+    networks:
+      - caserna_net
+
   caserna_db:
     image: postgres:14-alpine
     container_name: caserna_db
@@ -19,6 +31,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   caserna:
     image: caserna:latest
     container_name: caserna
@@ -31,6 +44,7 @@ services:
       - caserna_db
     networks:
       - caserna_net
+
   grafana:
     image: caserna_grafana:latest
     container_name: caserna_grafana
@@ -56,4 +70,4 @@ services:
 
 networks:
   caserna_net:
-    driver: bridge
+    driver: host
