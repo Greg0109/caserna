@@ -1,0 +1,72 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
+    depends_on:
+      - caserna
+      - caserna_db
+      - grafana
+    networks:
+      - caserna_net
+
+  caserna_db:
+    image: postgres:14-alpine
+    container_name: caserna_db
+    environment:
+      POSTGRES_USER: ${GF_DATABASE_USER}
+      POSTGRES_PASSWORD: ${GF_DATABASE_PASSWORD}
+      POSTGRES_DB: caserna
+      TZ: 'Europe/Madrid'
+    restart: unless-stopped
+    ports:
+      - "10995:5432"
+    volumes:
+      - ~/db_data:/var/lib/postgresql/data:Z
+    networks:
+      - caserna_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U greg -d caserna -h localhost -p 5432"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  caserna:
+    image: caserna:latest
+    container_name: caserna
+    privileged: true
+    restart: unless-stopped
+    environment:
+      TZ: 'Europe/Madrid'
+    depends_on:
+      - caserna_db
+    networks:
+      - caserna_net
+
+  grafana:
+    image: caserna_grafana:latest
+    container_name: caserna_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: ${GF_DATABASE_HOST}
+      GF_DATABASE_PORT: ${GF_DATABASE_PORT}
+      GF_DATABASE_NAME: ${GF_DATABASE_DB}
+      GF_DATABASE_USER: ${GF_DATABASE_USER}
+      GF_DATABASE_PASSWORD: ${GF_DATABASE_PASSWORD}
+      GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
+      TZ: 'Europe/Madrid'
+    depends_on:
+      - caserna_db
+    volumes:
+      - ~/grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - caserna_net
+
+networks:
+  caserna_net:
+    driver: bridge
