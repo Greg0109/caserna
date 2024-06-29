@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -119,7 +119,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Temperature\" FROM temperature ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Temperature\" FROM temperature ORDER BY timestamp;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -154,7 +154,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -248,7 +248,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Humidity\" FROM humidity ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Humidity\" FROM humidity ORDER BY timestamp;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -283,7 +283,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -377,7 +377,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Wind Speed\" FROM wind_speed ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Wind Speed\" FROM wind_speed ORDER BY timestamp;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -412,7 +412,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -471,7 +471,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 12,
         "y": 8
@@ -506,7 +506,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Wind Direction\" FROM wind_direction ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Wind Direction\" FROM wind_direction ORDER BY timestamp;",
           "refId": "D",
           "sql": {
             "columns": [
@@ -541,136 +541,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 3,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "always",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "area"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#5794F2",
-                "value": null
-              },
-              {
-                "color": "transparent",
-                "value": 32
-              }
-            ]
-          },
-          "unit": "mm"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 15
-      },
-      "id": 6,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "maxHeight": 600,
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "your-postgres-uid"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Rain\" FROM rain ORDER BY timestamp;",
-          "refId": "F",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          },
-          "timeColumn": "time",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Rain",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -764,7 +635,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Light\" FROM light ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Light\" FROM light ORDER BY timestamp;",
           "refId": "E",
           "sql": {
             "columns": [
@@ -799,7 +670,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "ddpnfqr67qozkf"
+        "uid": "ddq9lxo3e4y68e"
       },
       "fieldConfig": {
         "defaults": {
@@ -853,6 +724,134 @@
               }
             ]
           },
+          "unit": "mm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "maxHeight": 600,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "your-postgres-uid"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Rain\" FROM rain ORDER BY timestamp;",
+          "refId": "F",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Rain",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ddq9lxo3e4y68e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#5794F2"
+              },
+              {
+                "color": "transparent",
+                "value": 32
+              }
+            ]
+          },
           "unit": "hPa"
         },
         "overrides": []
@@ -893,7 +892,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", value AS \"Pressure\" FROM pressure ORDER BY timestamp;",
+          "rawSql": "SELECT timestamp AS \"time\", Value AS \"Pressure\" FROM pressure ORDER BY timestamp;",
           "refId": "G",
           "sql": {
             "columns": [
@@ -950,7 +949,7 @@
       "1d"
     ]
   },
-  "timezone": "browser",
+  "timezone": "utc",
   "title": "Time Dashboard",
   "uid": "weather-dashboard",
   "version": 3,
