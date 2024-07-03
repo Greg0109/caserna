@@ -24,6 +24,7 @@ font-manrope==0.0.2
 pillow==9.5.0
 smbus2==0.4.2
 pytz==2024.1
+flask==3.0.1
 
 # Database
 psycopg2-binary==2.9.6
